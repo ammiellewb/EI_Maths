@@ -6,8 +6,8 @@ from scipy.integrate import odeint # pour comparer les résultats stochastiques 
 # MODÈLE STOCHASTIQUE
 # définir les conditions initiales
 # lorsque le nombre de personnes dans ces groupes change, de nouvelles valeurs seront ajoutées aux listes.
-S = [4990] 
-I = [10]
+S = [1197] 
+I = [3]
 R = [0]
 t = [0]
 
@@ -15,8 +15,7 @@ t = [0]
 tend = 1000
 
 # définir les paramètres
-a = 40
-b = 0.001
+ab = 40 * 0.001
 r = 0.01
 
 
@@ -26,7 +25,7 @@ while t[-1] < tend and (S[-1] + I[-1] >= 1):
     N = S[-1] + I[-1] + R[-1]
 
      # liste des propensions des événements à se produire 
-    props = [I[-1]/N*S[-1]/N*a*b*N, r*I[-1]]
+    props = [ab*I[-1]*S[-1]/N, r*I[-1]]
 
     # calculer la somme des probabilités
     prop_sum = sum(props)
@@ -44,10 +43,10 @@ while t[-1] < tend and (S[-1] + I[-1] >= 1):
             S.append(S[-1] - 1)
             I.append(I[-1] + 1)
             R.append(R[-1])
-
+    
+    # si la première affirmation est fausse,  alors ce n'est pas le cas du premier événement et le deuxième événement doit se produire
     # un retrait : Infecté devient Récupéré
-    # elif rand * prop_sum > props[0] and rand * prop_sum <= sum(props[:2]):
-    else:
+    else: 
             S.append(S[-1])
             I.append(I[-1] - 1)
             R.append(R[-1] + 1)    
@@ -66,7 +65,7 @@ line3, = ax3.plot(t,R) # R
 ax1.set_ylabel("S")
 ax2.set_ylabel("I")
 ax3.set_ylabel("R")
-ax3.set_xlabel("Time")
+ax3.set_xlabel("Temps")
 
 # plt.show()
 
@@ -78,7 +77,7 @@ t = np.linspace(0,tend, num=1000)
 params = [a*b,r]
 
 
-y0 = [4990, 10, 0]
+y0 = [1197, 3, 0]
 
 
 
